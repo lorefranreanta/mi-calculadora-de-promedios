@@ -3,53 +3,78 @@ import streamlit as str
 # 1. Configuración de la página
 str.set_page_config(page_title="Calculadora de Promedios", page_icon="🧮", layout="centered")
 
-# Inyectamos estilos CSS avanzados para el modo oscuro, efecto 3D y la animación que TITILA
+# Inyectamos estilos CSS personalizados para el fondo azul, destellos blancos, letras doradas 3D y movimientos continuos
 str.markdown(
     """
     <style>
+    /* Fondo azul profundo con animación de destellos blancos simulando estrellas que titilan */
     .stApp {
-        background-color: #0E1117;
+        background: radial-gradient(circle, #0B1D3A 0%, #050C1A 100%);
+        background-image: 
+            radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+            radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+            radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
+        background-size: 550px 550px, 350px 350px, 250px 250px;
+        background-position: 0 0, 40px 60px, 130px 270px;
+        animation: estrellasTitilando 4s linear infinite alternate;
         color: #FAFAFA;
+        overflow-x: hidden;
     }
+
+    @keyframes estrellasTitilando {
+        0% { opacity: 0.8; background-position: 0 0, 40px 60px, 130px 270px; }
+        50% { opacity: 1; background-position: 10px 20px, 55px 40px, 115px 290px; }
+        100% { opacity: 0.9; background-position: -5px -10px, 30px 70px, 140px 250px; }
+    }
+
+    /* Estilo premium con efecto 3D dorado y relieve para las preguntas */
     .texto-3d {
-        font-size: 24px !important;
+        font-size: 25px !important;
         font-weight: bold !important;
-        color: #00F2FE;
+        color: #FFD700; /* Oro Puro */
         text-shadow: 
-            0px 1px 0px #0072FF,
-            0px 2px 0px #0072FF,
-            0px 3px 0px #0072FF,
-            0px 4px 5px rgba(0,0,0,0.5);
+            0px 1px 0px #D4AF37,
+            0px 2px 0px #AA7C11,
+            0px 3px 0px #805B00,
+            0px 4px 6px rgba(0,0,0,0.7);
         margin-bottom: 5px;
         margin-top: 15px;
+        display: inline-block;
     }
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
+
+    /* Animación de desvanecido suave con leve balanceo (Fade-in + Motion) */
+    @keyframes fadeInMovimiento {
+        0% { opacity: 0; transform: translateY(15px) scale(0.98); }
+        100% { opacity: 1; transform: translateY(0) scale(1); }
     }
+    
     .efecto-aparecer-pregunta {
-        animation: fadeIn 1.5s ease-out forwards;
+        animation: fadeInMovimiento 1.4s ease-out forwards;
     }
+    
     .efecto-aparecer-respuesta {
-        animation: fadeIn 1.2s ease-out forwards;
-        font-size: 18px;
-        font-weight: 500;
-        color: #FF007F;
+        animation: fadeInMovimiento 1.2s ease-out forwards;
+        font-size: 19px;
+        font-weight: bold;
+        color: #00FFFF; /* Cian eléctrico para contrastar con el fondo azul y oro */
         margin-top: 5px;
         margin-bottom: 15px;
     }
+
+    /* Animación para que la frase de ánimo titile (Blink continuo) */
     @keyframes titilar {
-        0% { opacity: 1; }
-        50% { opacity: 0.3; }
-        100% { opacity: 1; }
+        0% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(1.02); }
+        100% { opacity: 1; transform: scale(1); }
     }
+    
     .frase-titilante {
-        font-size: 20px !important;
+        font-size: 22px !important;
         font-weight: bold !important;
         text-align: center;
         margin-top: 20px;
         margin-bottom: 20px;
-        animation: titilar 1.5s infinite ease-in-out;
+        animation: titilar 1.8s infinite ease-in-out;
     }
     </style>
     """,
@@ -63,12 +88,12 @@ def limpiar_campos():
     for key in str.session_state.keys():
         del str.session_state[key]
 
-# --- BLOQUE 1: BIENVENIDA Y NOMBRE (Texto inicial corregido) ---
+# --- BLOQUE 1: BIENVENIDA Y NOMBRE ---
 str.markdown('<div class="efecto-aparecer-pregunta"><p class="texto-3d">👋 ¡Bienvenido! Escribe tu nombre para empezar...</p></div>', unsafe_allow_html=True)
 nombre = str.text_input("", placeholder="Tu nombre va aquí...", key="input_nombre")
 
 if nombre:
-    # Muestra el "Hola [nombre]" con efecto desvanecido solicitado
+    # Muestra el "Hola [nombre]" desvanecido abajo
     str.markdown(f'<div class="efecto-aparecer-respuesta">✨ Hola {nombre} ✨</div>', unsafe_allow_html=True)
     str.write("---")
     
@@ -82,7 +107,7 @@ if nombre:
         
         # --- BLOQUE 3: LAS NOTAS ---
         str.markdown('<div class="efecto-aparecer-pregunta"><p class="texto-3d">📝 Ingresa tus Notas:</p></div>', unsafe_allow_html=True)
-        str.caption("Deja en 0.0 las casillas que no uses. La app solo promediará los campos con notas mayores a cero.")
+        str.caption("La app solo promediará los campos con notas mayores a cero.")
         
         col1, col2, col3 = str.columns(3)
         with col1:
@@ -120,26 +145,19 @@ if nombre:
                 
                 str.success(f"### 🎉 ¡Listo {nombre}! Tu promedio en **{materia}** es: **{promedio_redondeado}**")
                 
-                # --- NUEVA LOGICA DE SONIDOS COMPATIBLE CON MÓVILES (Estable y Directa) ---
+                # --- NUEVA LÓGICA: Frases que Titilan continuamente y escalan en tamaño ---
                 if promedio_redondeado >= 9.0:
                     mensaje_motivacional = f"¡Sos un fuera de serie en {materia}! ¡Una ovación de pie para vos! 👑🏆"
                     color_frase = "#00FF66" 
-                    # Ovación masiva de estadio (WAV directo)
-                    url_sonido = "https://soundjay.com"
                     str.balloons()
                 elif promedio_redondeado >= 4.0:
                     mensaje_motivacional = f"¡Muy bien aprobado en {materia}! Todo esfuerzo da sus frutos. 📈👏"
                     color_frase = "#00F2FE" 
-                    # Aplausos estándar cortos y limpios
-                    url_sonido = "https://soundjay.com"
                 else:
                     mensaje_motivacional = f"A no bajar los brazos en {materia}. ¡La próxima la rompés seguro! 📚💪"
                     color_frase = "#FF3333" 
-                    # Sonido clásico de desaprobado (Buzzer / Fallo dramático corto)
-                    url_sonido = "https://soundjay.com"
                 
-                # REPRODUCTOR NATIVO DE STREAMLIT (Súper compatible con Android/iPhone)
-                str.audio(url_sonido, format="audio/wav", autoplay=True)
-                
-                # FRASE ANIMADA QUE TITILA ABAJO EN PANTALLA
+                # FRASE ANIMADA QUE TITILA CONTINUAMENTE
                 str.markdown(f'<div class="frase-titilante" style="color: {color_frase};">✨ {mensaje_motivacional} ✨</div>', unsafe_allow_html=True)
+else:
+    str.warning("👋 ¡Bienvenido! Por favor ingresa tu nombre arriba para empezar.")
