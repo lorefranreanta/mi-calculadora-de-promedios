@@ -4,7 +4,7 @@ import urllib.parse
 # 1. Configuración de la página
 str.set_page_config(page_title="Calculadora de Promedios", page_icon="🧮", layout="centered")
 
-# Inyectamos estilos CSS avanzados para el modo oscuro, efecto 3D y la animación de desvanecido (fade-in)
+# Inyectamos estilos CSS avanzados para el modo oscuro, efecto 3D y la animación de desvanecido
 str.markdown(
     """
     <style>
@@ -12,7 +12,6 @@ str.markdown(
         background-color: #0E1117;
         color: #FAFAFA;
     }
-    /* Estilo premium con efecto 3D y relieve para las preguntas */
     .texto-3d {
         font-size: 24px !important;
         font-weight: bold !important;
@@ -25,7 +24,6 @@ str.markdown(
         margin-bottom: 5px;
         margin-top: 15px;
     }
-    /* Animación de desvanecido suave (Fade-in) */
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
@@ -34,7 +32,7 @@ str.markdown(
         animation: fadeIn 1.2s ease-out forwards;
         font-size: 18px;
         font-weight: 500;
-        color: #FF007F; /* Color llamativo para las respuestas dinámicas */
+        color: #FF007F;
         margin-top: 5px;
         margin-bottom: 15px;
     }
@@ -46,7 +44,6 @@ str.markdown(
 str.title("🧮 Calculadora de Promedios")
 str.write("---")
 
-# Función para reiniciar todo
 def limpiar_campos():
     for key in str.session_state.keys():
         del str.session_state[key]
@@ -55,12 +52,11 @@ def limpiar_campos():
 str.markdown('<p class="texto-3d">👋 Hola, ¿cómo te llamas?</p>', unsafe_allow_html=True)
 nombre = str.text_input("", placeholder="Escribe tu nombre aquí y presiona Enter...", key="input_nombre")
 
-# Si escribió el nombre, aparece la respuesta desvanecida y se desbloquea la siguiente pregunta
 if nombre:
     str.markdown(f'<div class="efecto-aparecer">✨ ¡Hola, {nombre}! ✨</div>', unsafe_allow_html=True)
     str.write("---")
     
-    # --- BLOQUE 2: LA MATERIA (Solo aparece si ya hay nombre) ---
+    # --- BLOQUE 2: LA MATERIA ---
     str.markdown('<p class="texto-3d">📚 ¿Qué materia quieres promediar?</p>', unsafe_allow_html=True)
     materia = str.text_input("", placeholder="Ej. Matemáticas, Historia...", key="input_materia")
     
@@ -68,8 +64,8 @@ if nombre:
         str.markdown(f'<div class="efecto-aparecer">🚀 ¡Dale! Hagamos tu promedio para {materia}...</div>', unsafe_allow_html=True)
         str.write("---")
         
-        # --- BLOQUE 3: LAS NOTAS Y EL CÁLCULO (Solo aparece si completó todo lo anterior) ---
-        str.markdown('<p class="texto-3d">📝 Ingresa tus Notas (Hasta 6):</p>', unsafe_allow_html=True)
+        # --- BLOQUE 3: LAS NOTAS Y EL CÁLCULO ---
+        str.markdown('<p class="texto-3d">📝 Ingresa tus Notas:</p>', unsafe_allow_html=True)
         str.caption("Deja en 0.0 las casillas que no uses. La app solo promediará los campos con notas mayores a cero.")
         
         # Fila 1
@@ -92,11 +88,9 @@ if nombre:
 
         str.write("---")
 
-        # Filtrar notas válidas
         todas_las_notas = [nota1, nota2, nota3, nota4, nota5, nota6]
         notas_validas = [n for n in todas_las_notas if n > 0.0]
 
-        # Botones lado a lado
         btn_col1, btn_col2 = str.columns(2)
         with btn_col1:
             click_calcular = str.button("🔥 Calcular Promedio Real", type="primary", use_container_width=True)
@@ -123,12 +117,19 @@ if nombre:
                 str.write(f"**Comentario:** {mensaje_motivacional}")
                 str.write("---")
                 
-                # Reporte WhatsApp
-                mensaje_wsp = f"¡Hola! Soy {nombre}. Saqué un promedio final de: {promedio_redondeado} en la materia {materia}. {mensaje_motivacional}"
-                texto_codificado = urllib.parse.quote(mensaje_wsp)
-                url_wsp = f"https://whatsapp.com{texto_codificado}"
+                # Opciones para Compartir por WhatsApp
+                wsp_col1, wsp_col2 = str.columns(2)
                 
-                str.link_button("📱 Compartir por WhatsApp", url_wsp)
+                with wsp_col1:
+                    # Mensaje 1: El promedio obtenido
+                    msg_nota = f"¡Hola! Soy {nombre}. Saqué un promedio final de: {promedio_redondeado} en la materia {materia}. {mensaje_motivacional}"
+                    url_nota = f"https://whatsapp.com{urllib.parse.quote(msg_nota)}"
+                    str.link_button("📱 Compartir mi Promedio", url_nota, use_container_width=True)
+                
+                with wsp_col2:
+                    # Mensaje 2: Compartir la aplicación web para que otros la prueben
+                    msg_app = "¡Hola! Probé esta Calculadora de Promedios interactiva hecha en Python. ¡Entra y calcula tus notas de forma simple aquí!"
+                    url_app = f"https://whatsapp.com{urllib.parse.quote(msg_app)}"
+                    str.link_button("🌐 Compartir esta Aplicación", url_app, use_container_width=True)
 else:
-    # Mensaje inicial si todavía no escribió nada
     str.warning("👋 ¡Bienvenido! Por favor ingresa tu nombre arriba para empezar.")
