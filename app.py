@@ -4,7 +4,7 @@ import urllib.parse
 # 1. Configuración de la página
 str.set_page_config(page_title="Calculadora de Promedios", page_icon="🧮", layout="centered")
 
-# Inyectamos estilos CSS avanzados para el modo oscuro, efecto 3D, desvanecido y botones móviles premium
+# Inyectamos estilos CSS avanzados para el modo oscuro, efecto 3D y diseño de botones móviles
 str.markdown(
     """
     <style>
@@ -39,22 +39,24 @@ str.markdown(
         margin-top: 5px;
         margin-bottom: 15px;
     }
-    /* Estilo premium para que los enlaces HTML parezcan botones reales de Streamlit */
-    .boton-wsp {
-        display: inline-block;
+    /* Botones web nativos premium compatibles con Android/iOS */
+    .boton-wsp-movil {
+        display: block;
         width: 100%;
         text-align: center;
         background-color: #25D366;
         color: white !important;
-        padding: 10px 0px;
+        padding: 12px 0px;
         font-weight: bold;
+        font-size: 16px;
         border-radius: 8px;
         text-decoration: none;
-        margin-top: 5px;
-        box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
+        margin-top: 8px;
+        box-shadow: 0px 4px 8px rgba(0,0,0,0.3);
+        transition: transform 0.1s ease-in-out;
     }
-    .boton-wsp:hover {
-        background-color: #128C7E;
+    .boton-wsp-movil:active {
+        transform: scale(0.98);
     }
     </style>
     """,
@@ -84,7 +86,7 @@ if nombre:
         str.markdown(f'<div class="efecto-aparecer-respuesta">🚀 ¡Dale! Hagamos tu promedio para {materia}...</div>', unsafe_allow_html=True)
         str.write("---")
         
-        # --- BLOQUE 3: LAS NOTAS Y EL CÁLCULO ---
+        # --- BLOQUE 3: LAS NOTAS ---
         str.markdown('<div class="efecto-aparecer-pregunta"><p class="texto-3d">📝 Ingresa tus Notas:</p></div>', unsafe_allow_html=True)
         str.caption("Deja en 0.0 las casillas que no uses. La app solo promediará los campos con notas mayores a cero.")
         
@@ -137,22 +139,20 @@ if nombre:
                 str.write(f"**Comentario:** {mensaje_motivacional}")
                 str.write("---")
                 
-                # --- SOLUCIÓN MÓVIL: Enlaces HTML nativos simulando botones con target="_top" ---
+                # --- SOLUCIÓN DE ENLACE COMPATIBLE CON MÓVILES ---
                 wsp_col1, wsp_col2 = str.columns(2)
-                
-                # Link de tu aplicación web copiado dinámicamente
-                url_de_tu_app = "https://mi-calculadora-de-promedios-k3u9nztn3jt3pvxbpkc4gn.streamlit.app/"
+                url_de_tu_app = "https://streamlit.app"
                 
                 with wsp_col1:
                     msg_nota = f"¡Hola! Soy {nombre}. Saqué un promedio final de: {promedio_redondeado} en la materia {materia}. {mensaje_motivacional}"
-                    url_nota = f"https://whatsapp.com{urllib.parse.quote(msg_nota)}"
-                    # Código HTML nativo para saltear el bloqueo de cel
-                    str.markdown(f'<a href="{url_nota}" target="_top" class="boton-wsp">📱 Compartir mi Promedio</a>', unsafe_allow_html=True)
+                    # Usamos el enlace wa.me nativo para celulares
+                    url_nota = f"https://wa.me{urllib.parse.quote(msg_nota)}"
+                    str.markdown(f'<a href="{url_nota}" target="_blank" class="boton-wsp_movil" style="background-color: #25D366;">📱 Compartir mi Promedio</a>', unsafe_allow_html=True)
                 
                 with wsp_col2:
                     msg_app = f"¡Hola! Te comparto esta Calculadora de Promedios interactiva hecha en Python. ¡Calcula tus notas aquí de forma simple! 👉 {url_de_tu_app}"
-                    url_app = f"https://whatsapp.com{urllib.parse.quote(msg_app)}"
-                    # Código HTML nativo para saltear el bloqueo de cel e incluir el enlace a tu app
-                    str.markdown(f'<a href="{url_app}" target="_top" class="boton-wsp" style="background-color: #0072FF;">🌐 Compartir esta Aplicación</a>', unsafe_allow_html=True)
+                    # Usamos el enlace wa.me nativo para celulares
+                    url_app = f"https://wa.me{urllib.parse.quote(msg_app)}"
+                    str.markdown(f'<a href="{url_app}" target="_blank" class="boton-wsp_movil" style="background-color: #0072FF;">🌐 Compartir esta Aplicación</a>', unsafe_allow_html=True)
 else:
     str.warning("👋 ¡Bienvenido! Por favor ingresa tu nombre arriba para empezar.")
