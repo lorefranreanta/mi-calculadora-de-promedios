@@ -1,10 +1,10 @@
 import streamlit as str
 import urllib.parse
 
-# 1. Configuración de la página (Forzamos el tema oscuro mediante CSS simple)
+# 1. Configuración de la página
 str.set_page_config(page_title="Calculadora de Promedios", page_icon="📊", layout="centered")
 
-# Inyectamos estilos para asegurar el fondo oscuro y textos claros
+# Inyectamos estilos CSS corregidos para asegurar el fondo oscuro y textos claros
 str.markdown(
     """
     <style>
@@ -14,7 +14,6 @@ str.markdown(
     }
     </style>
     """,
-    unsafe_allow_stdio_html=True,
     unsafe_allow_html=True
 )
 
@@ -52,3 +51,4 @@ if str.button("Calcular Promedio", type="primary"):
     
     # Botón de enlace para abrir WhatsApp
     str.link_button("📱 Compartir por WhatsApp", url_wsp)
+
