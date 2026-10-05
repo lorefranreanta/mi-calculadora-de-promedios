@@ -3,7 +3,7 @@ import streamlit as str
 # 1. Configuración de la página
 str.set_page_config(page_title="Calculadora de Promedios", page_icon="🧮", layout="centered")
 
-# Inyectamos estilos CSS personalizados para el fondo azul, destellos blancos, letras doradas 3D y movimientos continuos
+# Inyectamos estilos CSS personalizados para el fondo azul, destellos blancos, letras plateadas HD y doradas 3D
 str.markdown(
     """
     <style>
@@ -25,6 +25,19 @@ str.markdown(
         0% { opacity: 0.8; background-position: 0 0, 40px 60px, 130px 270px; }
         50% { opacity: 1; background-position: 10px 20px, 55px 40px, 115px 290px; }
         100% { opacity: 0.9; background-position: -5px -10px, 30px 70px, 140px 250px; }
+    }
+
+    /* TÍTULO PRINCIPAL: Efecto Plateado Cromado de Alta Definición */
+    .titulo-plateado {
+        font-size: 42px !important;
+        font-weight: 900 !important;
+        text-align: center;
+        background: linear-gradient(to bottom, #FFFFFF 0%, #E0E0E0 45%, #BDBDBD 55%, #8D8D8D 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0px 2px 1px #666) drop-shadow(0px 4px 6px rgba(0,0,0,0.8));
+        margin-bottom: 25px;
+        font-family: 'Arial Black', Gadget, sans-serif;
     }
 
     /* Estilo premium con efecto 3D dorado y relieve para las preguntas */
@@ -81,7 +94,8 @@ str.markdown(
     unsafe_allow_html=True
 )
 
-str.title("🧮 Calculadora de Promedios")
+# Título renderizado en HTML con el nuevo estilo plateado HD
+str.markdown('<h1 class="titulo-plateado">🧮 Calculadora de Promedios</h1>', unsafe_allow_html=True)
 str.write("---")
 
 def limpiar_campos():
@@ -155,5 +169,3 @@ if nombre:
                 
                 # FRASE ANIMADA QUE TITILA CONTINUAMENTE ABAJO
                 str.markdown(f'<div class="frase-titilante" style="color: {color_frase};">✨ {mensaje_motivacional} ✨</div>', unsafe_allow_html=True)
-else:
-    str.warning("👋 ¡Bienvenido! Por favor ingresa tu nombre arriba para empezar.")
