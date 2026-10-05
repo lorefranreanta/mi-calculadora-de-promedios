@@ -1,10 +1,9 @@
 import streamlit as str
-import urllib.parse
 
 # 1. Configuración de la página
 str.set_page_config(page_title="Calculadora de Promedios", page_icon="🧮", layout="centered")
 
-# Inyectamos estilos CSS avanzados para el modo oscuro, efecto 3D y diseño de botones móviles
+# Inyectamos estilos CSS para el modo oscuro, efecto 3D, desvanecido y la animación que TITILA
 str.markdown(
     """
     <style>
@@ -39,24 +38,19 @@ str.markdown(
         margin-top: 5px;
         margin-bottom: 15px;
     }
-    /* Botones web nativos premium compatibles con Android/iOS */
-    .boton-wsp-movil {
-        display: block;
-        width: 100%;
-        text-align: center;
-        background-color: #25D366;
-        color: white !important;
-        padding: 12px 0px;
-        font-weight: bold;
-        font-size: 16px;
-        border-radius: 8px;
-        text-decoration: none;
-        margin-top: 8px;
-        box-shadow: 0px 4px 8px rgba(0,0,0,0.3);
-        transition: transform 0.1s ease-in-out;
+    /* Animación para que la frase de ánimo titile (Blink) */
+    @keyframes titilar {
+        0% { opacity: 1; }
+        50% { opacity: 0.3; }
+        100% { opacity: 1; }
     }
-    .boton-wsp-movil:active {
-        transform: scale(0.98);
+    .frase-titilante {
+        font-size: 20px !important;
+        font-weight: bold !important;
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        animation: titilar 1.5s infinite ease-in-out;
     }
     </style>
     """,
@@ -90,7 +84,6 @@ if nombre:
         str.markdown('<div class="efecto-aparecer-pregunta"><p class="texto-3d">📝 Ingresa tus Notas:</p></div>', unsafe_allow_html=True)
         str.caption("Deja en 0.0 las casillas que no uses. La app solo promediará los campos con notas mayores a cero.")
         
-        # Fila 1
         col1, col2, col3 = str.columns(3)
         with col1:
             nota1 = str.number_input("Nota 1:", min_value=0.0, max_value=10.0, value=0.0, step=0.1, key="n1")
@@ -99,7 +92,6 @@ if nombre:
         with col3:
             nota3 = str.number_input("Nota 3:", min_value=0.0, max_value=10.0, value=0.0, step=0.1, key="n3")
 
-        # Fila 2
         col4, col5, col6 = str.columns(3)
         with col4:
             nota4 = str.number_input("Nota 4:", min_value=0.0, max_value=10.0, value=0.0, step=0.1, key="n4")
@@ -128,31 +120,28 @@ if nombre:
                 
                 str.success(f"### 🎉 ¡Listo {nombre}! Tu promedio en **{materia}** es: **{promedio_redondeado}**")
                 
-                if promedio_redondeado >= 7.0:
-                    mensaje_motivacional = f"¡Excelente nota en {materia}! Sigue así, estás brillando. 🌟🚀"
+                # --- NUEVA LÓGICA: Audios y Frases Titilantes ---
+                if promedio_redondeado >= 9.0:
+                    mensaje_motivacional = f"¡Sos un fuera de serie en {materia}! ¡Una ovación de pie para vos! 👑🏆"
+                    color_frase = "#00FF66" # Verde brillante
+                    # Enlace de sonido: Ovación / Cheering masivo
+                    url_sonido = "https://mixkit.co"
                     str.balloons()
                 elif promedio_redondeado >= 4.0:
-                    mensaje_motivacional = f"¡Buen trabajo! Aprobaste {materia}, pero puedes mejorar aún más. 📈👍"
+                    mensaje_motivacional = f"¡Muy bien aprobado en {materia}! Todo esfuerzo da sus frutos. 📈👏"
+                    color_frase = "#00F2FE" # Celeste neón
+                    # Enlace de sonido: Aplausos estándar
+                    url_sonido = "https://mixkit.co"
                 else:
-                    mensaje_motivacional = f"¡A estudiar más para {materia}! Tú puedes hacerlo mejor la próxima. 📚💪"
+                    mensaje_motivacional = f"A no bajar los brazos en {materia}. ¡La próxima la rompés seguro! 📚💪"
+                    color_frase = "#FF3333" # Rojo alerta
+                    # Enlace de sonido: Efecto clásico de error / desaprobación (trombón triste o fail)
+                    url_sonido = "https://mixkit.co"
                 
-                str.write(f"**Comentario:** {mensaje_motivacional}")
-                str.write("---")
+                # REPRODUCTOR DE AUDIO OCULTO HTML (Se ejecuta solo al calcular)
+                str.markdown(f'<iframe src="{url_sonido}" allow="autoplay" style="display:none;"></iframe>', unsafe_allow_html=True)
                 
-                # --- SOLUCIÓN DE ENLACE COMPATIBLE CON MÓVILES ---
-                wsp_col1, wsp_col2 = str.columns(2)
-                url_de_tu_app = "https://streamlit.app"
-                
-                with wsp_col1:
-                    msg_nota = f"¡Hola! Soy {nombre}. Saqué un promedio final de: {promedio_redondeado} en la materia {materia}. {mensaje_motivacional}"
-                    # Usamos el enlace wa.me nativo para celulares
-                    url_nota = f"https://wa.me{urllib.parse.quote(msg_nota)}"
-                    str.markdown(f'<a href="{url_nota}" target="_blank" class="boton-wsp_movil" style="background-color: #25D366;">📱 Compartir mi Promedio</a>', unsafe_allow_html=True)
-                
-                with wsp_col2:
-                    msg_app = f"¡Hola! Te comparto esta Calculadora de Promedios interactiva hecha en Python. ¡Calcula tus notas aquí de forma simple! 👉 {url_de_tu_app}"
-                    # Usamos el enlace wa.me nativo para celulares
-                    url_app = f"https://wa.me{urllib.parse.quote(msg_app)}"
-                    str.markdown(f'<a href="{url_app}" target="_blank" class="boton-wsp_movil" style="background-color: #0072FF;">🌐 Compartir esta Aplicación</a>', unsafe_allow_html=True)
+                # FRASE ANIMADA QUE TITILA EN PANTALLA
+                str.markdown(f'<div class="frase-titilante" style="color: {color_frase};">✨ {mensaje_motivacional} ✨</div>', unsafe_allow_html=True)
 else:
     str.warning("👋 ¡Bienvenido! Por favor ingresa tu nombre arriba para empezar.")
