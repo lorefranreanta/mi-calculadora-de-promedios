@@ -56,7 +56,7 @@ str.markdown(
         animation: fadeInMovimiento 1.2s ease-out forwards;
         font-size: 19px;
         font-weight: bold;
-        color: #00FFFF; /* Cian eléctrico para contrastar con el fondo azul y oro */
+        color: #00FFFF; /* Cian eléctrico para contraste */
         margin-top: 5px;
         margin-bottom: 15px;
     }
@@ -93,7 +93,6 @@ str.markdown('<div class="efecto-aparecer-pregunta"><p class="texto-3d">👋 ¡B
 nombre = str.text_input("", placeholder="Tu nombre va aquí...", key="input_nombre")
 
 if nombre:
-    # Muestra el "Hola [nombre]" desvanecido abajo
     str.markdown(f'<div class="efecto-aparecer-respuesta">✨ Hola {nombre} ✨</div>', unsafe_allow_html=True)
     str.write("---")
     
@@ -145,19 +144,51 @@ if nombre:
                 
                 str.success(f"### 🎉 ¡Listo {nombre}! Tu promedio en **{materia}** es: **{promedio_redondeado}**")
                 
-                # --- NUEVA LÓGICA: Frases que Titilan continuamente y escalan en tamaño ---
-                if promedio_redondeado >= 9.0:
-                    mensaje_motivacional = f"¡Sos un fuera de serie en {materia}! ¡Una ovación de pie para vos! 👑🏆"
-                    color_frase = "#00FF66" 
-                    str.balloons()
-                elif promedio_redondeado >= 4.0:
-                    mensaje_motivacional = f"¡Muy bien aprobado en {materia}! Todo esfuerzo da sus frutos. 📈👏"
-                    color_frase = "#00F2FE" 
+                # --- NUEVA LÓGICA DE ACTUALIZACIÓN DE NOTAS Y ANIMACIÓN PERSONALIZADA ---
+                if promedio_redondeado >= 4.0:
+                    color_frase = "#00FF66" # Verde éxito
+                    if promedio_redondeado >= 9.0:
+                        mensaje_motivacional = f"¡Sos un fuera de serie en {materia}! ¡Una ovación de pie para vos! 👑🏆"
+                    else:
+                        mensaje_motivacional = f"¡Muy bien aprobado en {materia}! Todo esfuerzo da sus frutos. 📈👏"
+                    
+                    # CÓDIGO JAVASCRIPT: Lanza destellos y explosiones continuas color DORADO (#FFD700) y AZUL (#0072FF)
+                    animacion_destellos_html = """
+                    <script src="https://jsdelivr.net"></script>
+                    <script>
+                        var duracion = 3 * 1000;
+                        var fin = Date.now() + duracion;
+
+                        (function frame() {
+                            confetti({
+                                particleCount: 5,
+                                angle: 60,
+                                spread: 55,
+                                origin: { x: 0, y: 0.8 },
+                                colors: ['#FFD700', '#0072FF']
+                            });
+                            confetti({
+                                particleCount: 5,
+                                angle: 120,
+                                spread: 55,
+                                origin: { x: 1, y: 0.8 },
+                                colors: ['#FFD700', '#0072FF']
+                            });
+
+                            if (Date.now() < fin) {
+                                requestAnimationFrame(frame);
+                            }
+                        }());
+                    </script>
+                    """
+                    # Ejecutamos el script para que salgan las partículas doradas y azules con destellos en el cel/PC
+                    str.components.v1.html(animacion_destellos_html, height=0)
+                    
                 else:
                     mensaje_motivacional = f"A no bajar los brazos en {materia}. ¡La próxima la rompés seguro! 📚💪"
-                    color_frase = "#FF3333" 
+                    color_frase = "#FF3333" # Rojo alerta
                 
-                # FRASE ANIMADA QUE TITILA CONTINUAMENTE
+                # FRASE ANIMADA QUE TITILA CONTINUAMENTE ABAJO
                 str.markdown(f'<div class="frase-titilante" style="color: {color_frase};">✨ {mensaje_motivacional} ✨</div>', unsafe_allow_html=True)
 else:
     str.warning("👋 ¡Bienvenido! Por favor ingresa tu nombre arriba para empezar.")
