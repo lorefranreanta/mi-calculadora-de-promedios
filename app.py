@@ -3,7 +3,7 @@ import streamlit as str
 # 1. Configuración de la página
 str.set_page_config(page_title="Calculadora de Promedios", page_icon="🧮", layout="centered")
 
-# Inyectamos estilos CSS para el modo oscuro, efecto 3D, desvanecido y la animación que TITILA
+# Inyectamos estilos CSS avanzados para el modo oscuro, efecto 3D y la animación que TITILA
 str.markdown(
     """
     <style>
@@ -38,7 +38,6 @@ str.markdown(
         margin-top: 5px;
         margin-bottom: 15px;
     }
-    /* Animación para que la frase de ánimo titile (Blink) */
     @keyframes titilar {
         0% { opacity: 1; }
         50% { opacity: 0.3; }
@@ -64,12 +63,13 @@ def limpiar_campos():
     for key in str.session_state.keys():
         del str.session_state[key]
 
-# --- BLOQUE 1: EL NOMBRE ---
-str.markdown('<div class="efecto-aparecer-pregunta"><p class="texto-3d">👋 Hola, ¿cómo te llamas?</p></div>', unsafe_allow_html=True)
-nombre = str.text_input("", placeholder="Escribe tu nombre aquí y presiona Enter...", key="input_nombre")
+# --- BLOQUE 1: BIENVENIDA Y NOMBRE (Texto inicial corregido) ---
+str.markdown('<div class="efecto-aparecer-pregunta"><p class="texto-3d">👋 ¡Bienvenido! Escribe tu nombre para empezar...</p></div>', unsafe_allow_html=True)
+nombre = str.text_input("", placeholder="Tu nombre va aquí...", key="input_nombre")
 
 if nombre:
-    str.markdown(f'<div class="efecto-aparecer-respuesta">✨ ¡Hola, {nombre}! ✨</div>', unsafe_allow_html=True)
+    # Muestra el "Hola [nombre]" con efecto desvanecido solicitado
+    str.markdown(f'<div class="efecto-aparecer-respuesta">✨ Hola {nombre} ✨</div>', unsafe_allow_html=True)
     str.write("---")
     
     # --- BLOQUE 2: LA MATERIA ---
@@ -120,28 +120,26 @@ if nombre:
                 
                 str.success(f"### 🎉 ¡Listo {nombre}! Tu promedio en **{materia}** es: **{promedio_redondeado}**")
                 
-                # --- NUEVA LÓGICA: Audios y Frases Titilantes ---
+                # --- NUEVA LOGICA DE SONIDOS COMPATIBLE CON MÓVILES (Estable y Directa) ---
                 if promedio_redondeado >= 9.0:
                     mensaje_motivacional = f"¡Sos un fuera de serie en {materia}! ¡Una ovación de pie para vos! 👑🏆"
-                    color_frase = "#00FF66" # Verde brillante
-                    # Enlace de sonido: Ovación / Cheering masivo
-                    url_sonido = "https://mixkit.co"
+                    color_frase = "#00FF66" 
+                    # Ovación masiva de estadio (WAV directo)
+                    url_sonido = "https://soundjay.com"
                     str.balloons()
                 elif promedio_redondeado >= 4.0:
                     mensaje_motivacional = f"¡Muy bien aprobado en {materia}! Todo esfuerzo da sus frutos. 📈👏"
-                    color_frase = "#00F2FE" # Celeste neón
-                    # Enlace de sonido: Aplausos estándar
-                    url_sonido = "https://mixkit.co"
+                    color_frase = "#00F2FE" 
+                    # Aplausos estándar cortos y limpios
+                    url_sonido = "https://soundjay.com"
                 else:
                     mensaje_motivacional = f"A no bajar los brazos en {materia}. ¡La próxima la rompés seguro! 📚💪"
-                    color_frase = "#FF3333" # Rojo alerta
-                    # Enlace de sonido: Efecto clásico de error / desaprobación (trombón triste o fail)
-                    url_sonido = "https://mixkit.co"
+                    color_frase = "#FF3333" 
+                    # Sonido clásico de desaprobado (Buzzer / Fallo dramático corto)
+                    url_sonido = "https://soundjay.com"
                 
-                # REPRODUCTOR DE AUDIO OCULTO HTML (Se ejecuta solo al calcular)
-                str.markdown(f'<iframe src="{url_sonido}" allow="autoplay" style="display:none;"></iframe>', unsafe_allow_html=True)
+                # REPRODUCTOR NATIVO DE STREAMLIT (Súper compatible con Android/iPhone)
+                str.audio(url_sonido, format="audio/wav", autoplay=True)
                 
-                # FRASE ANIMADA QUE TITILA EN PANTALLA
+                # FRASE ANIMADA QUE TITILA ABAJO EN PANTALLA
                 str.markdown(f'<div class="frase-titilante" style="color: {color_frase};">✨ {mensaje_motivacional} ✨</div>', unsafe_allow_html=True)
-else:
-    str.warning("👋 ¡Bienvenido! Por favor ingresa tu nombre arriba para empezar.")
