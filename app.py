@@ -144,14 +144,14 @@ if nombre:
                 
                 str.success(f"### 🎉 ¡Listo {nombre}! Tu promedio en **{materia}** es: **{promedio_redondeado}**")
                 
-                # --- NUEVA REGLA Y FRASE SOLICITADA PARA EL APROBADO (6.0 o más) ---
+                # --- NUEVAS FRASES ASIGNADAS (6.0 o más para aprobar) ---
                 if promedio_redondeado >= 6.0:
                     color_frase = "#00FF66" # Verde éxito
-                    mensaje_motivacional = "lo lograste aprobaste, se que estas cansad@ pero todo esfuerzo valio la pena, ahora a seguir avanzando"
+                    mensaje_motivacional = f"lo lograste {nombre}, todo esfuerzo valio la pena ahora a seguir avanzando"
                     str.balloons() # Lanza los globos
                 else:
-                    mensaje_motivacional = f"A no bajar los brazos en {materia}. ¡La próxima la rompés seguro! 📚💪"
                     color_frase = "#FF3333" # Rojo alerta
+                    mensaje_motivacional = "no pudo ser esta vez pero es cuestion de seguir intentando de eso se trata la vida"
                 
                 # FRASE ANIMADA QUE TITILA CONTINUAMENTE ABAJO
                 str.markdown(f'<div class="frase-titilante" style="color: {color_frase};">✨ {mensaje_motivacional} ✨</div>', unsafe_allow_html=True)
