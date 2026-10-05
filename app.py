@@ -4,7 +4,7 @@ import urllib.parse
 # 1. Configuración de la página
 str.set_page_config(page_title="Calculadora de Promedios", page_icon="🧮", layout="centered")
 
-# Inyectamos estilos CSS avanzados para el modo oscuro, efecto 3D y la animación de desvanecido para TODO
+# Inyectamos estilos CSS avanzados para el modo oscuro, efecto 3D, desvanecido y botones móviles premium
 str.markdown(
     """
     <style>
@@ -12,7 +12,6 @@ str.markdown(
         background-color: #0E1117;
         color: #FAFAFA;
     }
-    /* Estilo premium con efecto 3D y relieve para las preguntas */
     .texto-3d {
         font-size: 24px !important;
         font-weight: bold !important;
@@ -25,7 +24,6 @@ str.markdown(
         margin-bottom: 5px;
         margin-top: 15px;
     }
-    /* Animación de desvanecido suave (Fade-in) */
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
@@ -41,6 +39,23 @@ str.markdown(
         margin-top: 5px;
         margin-bottom: 15px;
     }
+    /* Estilo premium para que los enlaces HTML parezcan botones reales de Streamlit */
+    .boton-wsp {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+        background-color: #25D366;
+        color: white !important;
+        padding: 10px 0px;
+        font-weight: bold;
+        border-radius: 8px;
+        text-decoration: none;
+        margin-top: 5px;
+        box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
+    }
+    .boton-wsp:hover {
+        background-color: #128C7E;
+    }
     </style>
     """,
     unsafe_allow_html=True
@@ -53,7 +68,7 @@ def limpiar_campos():
     for key in str.session_state.keys():
         del str.session_state[key]
 
-# --- BLOQUE 1: EL NOMBRE (Aparece desvanecido al cargar la app) ---
+# --- BLOQUE 1: EL NOMBRE ---
 str.markdown('<div class="efecto-aparecer-pregunta"><p class="texto-3d">👋 Hola, ¿cómo te llamas?</p></div>', unsafe_allow_html=True)
 nombre = str.text_input("", placeholder="Escribe tu nombre aquí y presiona Enter...", key="input_nombre")
 
@@ -61,7 +76,7 @@ if nombre:
     str.markdown(f'<div class="efecto-aparecer-respuesta">✨ ¡Hola, {nombre}! ✨</div>', unsafe_allow_html=True)
     str.write("---")
     
-    # --- BLOQUE 2: LA MATERIA (Aparece desvanecida solo tras poner el nombre) ---
+    # --- BLOQUE 2: LA MATERIA ---
     str.markdown('<div class="efecto-aparecer-pregunta"><p class="texto-3d">📚 ¿Qué materia quieres promediar?</p></div>', unsafe_allow_html=True)
     materia = str.text_input("", placeholder="Ej. Matemáticas, Historia...", key="input_materia")
     
@@ -122,16 +137,22 @@ if nombre:
                 str.write(f"**Comentario:** {mensaje_motivacional}")
                 str.write("---")
                 
+                # --- SOLUCIÓN MÓVIL: Enlaces HTML nativos simulando botones con target="_top" ---
                 wsp_col1, wsp_col2 = str.columns(2)
+                
+                # Link de tu aplicación web copiado dinámicamente
+                url_de_tu_app = "https://mi-calculadora-de-promedios-k3u9nztn3jt3pvxbpkc4gn.streamlit.app/"
                 
                 with wsp_col1:
                     msg_nota = f"¡Hola! Soy {nombre}. Saqué un promedio final de: {promedio_redondeado} en la materia {materia}. {mensaje_motivacional}"
                     url_nota = f"https://whatsapp.com{urllib.parse.quote(msg_nota)}"
-                    str.link_button("📱 Compartir mi Promedio", url_nota, use_container_width=True)
+                    # Código HTML nativo para saltear el bloqueo de cel
+                    str.markdown(f'<a href="{url_nota}" target="_top" class="boton-wsp">📱 Compartir mi Promedio</a>', unsafe_allow_html=True)
                 
                 with wsp_col2:
-                    msg_app = "¡Hola! Probé esta Calculadora de Promedios interactiva hecha en Python. ¡Entra y calcula tus notas de forma simple aquí!"
+                    msg_app = f"¡Hola! Te comparto esta Calculadora de Promedios interactiva hecha en Python. ¡Calcula tus notas aquí de forma simple! 👉 {url_de_tu_app}"
                     url_app = f"https://whatsapp.com{urllib.parse.quote(msg_app)}"
-                    str.link_button("🌐 Compartir esta Aplicación", url_app, use_container_width=True)
+                    # Código HTML nativo para saltear el bloqueo de cel e incluir el enlace a tu app
+                    str.markdown(f'<a href="{url_app}" target="_top" class="boton-wsp" style="background-color: #0072FF;">🌐 Compartir esta Aplicación</a>', unsafe_allow_html=True)
 else:
     str.warning("👋 ¡Bienvenido! Por favor ingresa tu nombre arriba para empezar.")
