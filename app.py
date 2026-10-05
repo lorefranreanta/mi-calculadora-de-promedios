@@ -1,3 +1,4 @@
+
 import streamlit as str
 
 # 1. Configuración de la página
@@ -89,12 +90,22 @@ str.markdown(
         margin-bottom: 20px;
         animation: titilar 1.8s infinite ease-in-out;
     }
+
+    /* Estilo para los créditos de autoría abajo de todo */
+    .firma-autor {
+        text-align: center;
+        color: #888888;
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 50px;
+        letter-spacing: 1px;
+    }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Título renderizado en HTML con el nuevo estilo plateado HD
+# Título renderizado en HTML con el estilo plateado HD
 str.markdown('<h1 class="titulo-plateado">🧮 Calculadora de Promedios</h1>', unsafe_allow_html=True)
 str.write("---")
 
@@ -158,14 +169,17 @@ if nombre:
                 
                 str.success(f"### 🎉 ¡Listo {nombre}! Tu promedio en **{materia}** es: **{promedio_redondeado}**")
                 
-                # --- NUEVAS FRASES ASIGNADAS (6.0 o más para aprobar) ---
+                # --- FRASES ASIGNADAS (6.0 o más para aprobar) ---
                 if promedio_redondeado >= 6.0:
-                    color_frase = "#00FF66" # Verde éxito
+                    color_frase = "#00FF66" 
                     mensaje_motivacional = f"lo lograste {nombre}, todo esfuerzo valio la pena ahora a seguir avanzando"
-                    str.balloons() # Lanza los globos
+                    str.balloons() 
                 else:
-                    color_frase = "#FF3333" # Rojo alerta
+                    color_frase = "#FF3333" 
                     mensaje_motivacional = "no pudo ser esta vez pero es cuestion de seguir intentando de eso se trata la vida"
                 
                 # FRASE ANIMADA QUE TITILA CONTINUAMENTE ABAJO
                 str.markdown(f'<div class="frase-titilante" style="color: {color_frase};">✨ {mensaje_motivacional} ✨</div>', unsafe_allow_html=True)
+
+# --- CRÉDITOS DE AUTORÍA (Firma personal fija al final de la página) ---
+str.markdown('<div class="firma-autor">🚀 Creada por Lorena Martinez</div>', unsafe_allow_html=True)
