@@ -4,7 +4,7 @@ import urllib.parse
 # 1. Configuración de la página
 str.set_page_config(page_title="Calculadora de Promedios", page_icon="📊", layout="centered")
 
-# Inyectamos estilos CSS corregidos para asegurar el fondo oscuro y textos claros
+# Inyectamos estilos CSS para asegurar el fondo oscuro y textos claros
 str.markdown(
     """
     <style>
@@ -44,11 +44,23 @@ if str.button("Calcular Promedio", type="primary"):
     nombre_usuario = nombre if nombre else "Amigo"
     str.success(f"### 🎉 ¡Listo {nombre_usuario}! Tu promedio final es: **{promedio_redondeado}**")
     
-    # Crear el enlace de WhatsApp incluyendo el nombre
-    mensaje_wsp = f"¡Hola! Soy {nombre_usuario}. Saqué un promedio final de: {promedio_redondeado}."
+    # --- NUEVA LÓGICA: Mensajes personalizados según la nota ---
+    if promedio_redondeado >= 7.0:
+        mensaje_motivacional = "¡Excelente nota! Sigue así, estás brillando. 🌟🚀"
+        str.balloons() # ¡Efecto animado de globos volando en la pantalla!
+    elif promedio_redondeado >= 4.0:
+        mensaje_motivacional = "¡Buen trabajo! Aprobaste, pero puedes mejorar aún más. 📈👍"
+    else:
+        mensaje_motivacional = "¡A estudiar más para la próxima! Tú puedes hacerlo mejor. 📚💪"
+    
+    # Mostrar el mensaje motivacional en la pantalla
+    str.write(f"**Comentario:** {mensaje_motivacional}")
+    str.write("---")
+    
+    # Crear el enlace de WhatsApp incluyendo el nombre y el promedio obtenido
+    mensaje_wsp = f"¡Hola! Soy {nombre_usuario}. Saqué un promedio final de: {promedio_redondeado}. {mensaje_motivacional}"
     texto_codificado = urllib.parse.quote(mensaje_wsp)
     url_wsp = f"https://whatsapp.com{texto_codificado}"
     
     # Botón de enlace para abrir WhatsApp
     str.link_button("📱 Compartir por WhatsApp", url_wsp)
-
