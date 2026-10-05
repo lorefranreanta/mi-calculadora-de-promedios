@@ -144,18 +144,11 @@ if nombre:
                 
                 str.success(f"### 🎉 ¡Listo {nombre}! Tu promedio en **{materia}** es: **{promedio_redondeado}**")
                 
-                # --- NUEVA REGLA: GLOBOS NATIVOS A PARTIR DE 6 PUNTOS ---
+                # --- NUEVA REGLA Y FRASE SOLICITADA PARA EL APROBADO (6.0 o más) ---
                 if promedio_redondeado >= 6.0:
                     color_frase = "#00FF66" # Verde éxito
-                    
-                    if promedio_redondeado >= 9.0:
-                        mensaje_motivacional = f"¡Sos un fuera de serie en {materia}! ¡Una ovación de pie para vos! 👑🏆"
-                    else:
-                        mensaje_motivacional = f"¡Muy bien aprobado en {materia}! Todo esfuerzo da sus frutos. 📈👏"
-                    
-                    # Soltar globos garantizados en pantalla
-                    str.balloons()
-                    
+                    mensaje_motivacional = "lo lograste aprobaste, se que estas cansad@ pero todo esfuerzo valio la pena, ahora a seguir avanzando"
+                    str.balloons() # Lanza los globos
                 else:
                     mensaje_motivacional = f"A no bajar los brazos en {materia}. ¡La próxima la rompés seguro! 📚💪"
                     color_frase = "#FF3333" # Rojo alerta
