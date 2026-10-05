@@ -144,45 +144,17 @@ if nombre:
                 
                 str.success(f"### 🎉 ¡Listo {nombre}! Tu promedio en **{materia}** es: **{promedio_redondeado}**")
                 
-                # --- NUEVA LÓGICA DE ACTUALIZACIÓN DE NOTAS Y ANIMACIÓN PERSONALIZADA ---
-                if promedio_redondeado >= 4.0:
+                # --- NUEVA REGLA: GLOBOS NATIVOS A PARTIR DE 6 PUNTOS ---
+                if promedio_redondeado >= 6.0:
                     color_frase = "#00FF66" # Verde éxito
+                    
                     if promedio_redondeado >= 9.0:
                         mensaje_motivacional = f"¡Sos un fuera de serie en {materia}! ¡Una ovación de pie para vos! 👑🏆"
                     else:
                         mensaje_motivacional = f"¡Muy bien aprobado en {materia}! Todo esfuerzo da sus frutos. 📈👏"
                     
-                    # CÓDIGO JAVASCRIPT: Lanza destellos y explosiones continuas color DORADO (#FFD700) y AZUL (#0072FF)
-                    animacion_destellos_html = """
-                    <script src="https://jsdelivr.net"></script>
-                    <script>
-                        var duracion = 3 * 1000;
-                        var fin = Date.now() + duracion;
-
-                        (function frame() {
-                            confetti({
-                                particleCount: 5,
-                                angle: 60,
-                                spread: 55,
-                                origin: { x: 0, y: 0.8 },
-                                colors: ['#FFD700', '#0072FF']
-                            });
-                            confetti({
-                                particleCount: 5,
-                                angle: 120,
-                                spread: 55,
-                                origin: { x: 1, y: 0.8 },
-                                colors: ['#FFD700', '#0072FF']
-                            });
-
-                            if (Date.now() < fin) {
-                                requestAnimationFrame(frame);
-                            }
-                        }());
-                    </script>
-                    """
-                    # Ejecutamos el script para que salgan las partículas doradas y azules con destellos en el cel/PC
-                    str.components.v1.html(animacion_destellos_html, height=0)
+                    # Soltar globos garantizados en pantalla
+                    str.balloons()
                     
                 else:
                     mensaje_motivacional = f"A no bajar los brazos en {materia}. ¡La próxima la rompés seguro! 📚💪"
